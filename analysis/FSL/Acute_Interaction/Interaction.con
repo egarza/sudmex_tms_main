@@ -1,0 +1,10 @@
+/ContrastName1	Real > Sham 
+/ContrastName2	Sham > Real 
+/NumWaves	2
+/NumContrasts	2
+/PPheights		1.000000e+00	1.000000e+00
+/RequiredEffect		1.273	1.273
+
+/Matrix
+-1.000000e+00 1.000000e+00 
+1.000000e+00 -1.000000e+00 

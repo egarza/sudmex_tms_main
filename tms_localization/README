@@ -1,0 +1,10 @@
+
+1. Converted MNI coordinates to Voxel using mni2vox.sh
+2. Created Sphere ROIs using the scripts sphere_roi.sh
+3. Folder `individual_target` stores the subject ROIs.
+4. `AVG.nii.gz` is the average ROI used for connectivity analysis.
+5. Files with prefix `roi` are groupings of all rois, with different subgroupings: `5_cm` and `beamF3` refer to the type of method used for measuring the target location; `active` and `sham` refer to the subject group in the active phase of the trial.
+6. The dataset is `sudmex_tms_localization_27` which has all the info needed to reproduce the Figure shown in the manuscript using MRIcroGL.
+7. The figures in were created using MRIcroGL with the `fuzzy` brain on the FSL MNI152_T1_1mm template, overlays were full superficial depth.
+
+

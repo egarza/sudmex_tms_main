@@ -1,0 +1,640 @@
+---
+title: "SUDMEX-TMS-FC_CLIN-results"
+author: "Eduardo A. Garza-Villarreal"
+date: "07/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(psych)
+library(moonBook)
+library(magrittr)
+library(ztable)
+library(sjlabelled)
+library(ggpubr)
+library(gt)
+library(ztable)
+library(sjlabelled)
+library(knitr)
+library(kableExtra)
+library(papeR)
+library(EMT)
+library(rcompanion)
+library(psych)
+library(vcd)
+library(DescTools)
+library(ggpubr)
+library(lme4)
+library(lmerTest)
+library(broom.mixed)
+library(pander)
+library(multcomp)
+library(lubridate)
+library(rstatix)
+library(EMAtools)
+```
+
+# Load data
+
+```{r Load_data}
+root="/media/egarza/Elements2/projects/ADDIMEX_TMS/FC_CLIN/4-Dissemination/2-Publications/OpenScience/addimex_tms/data/clinical/" # modify the root path.
+
+# Import datasets
+
+data2w <- read_csv(paste(root,"data2w.csv", sep=""))
+data6m <- read_csv(paste(root,"data6m.csv", sep=""))
+data6m_conn <- read_csv(paste(root,"data6m_conn.csv", sep=""))
+dataT0_gen <- read_csv(paste(root, "dataT0_gen.csv", sep =""))
+```
+# Add factors
+```{r Add_factors}
+groupfactor <- function(data) {
+   factor(data$group,levels = c("SHAM","ACTIVE"), labels = c("SHAM", "ACTIVE"))
+}
+
+stagefactor <- function(data) {
+  factor(data$stage, levels = c("T0","T1","T1-4","T2","T3","T4","T5"))
+}
+
+dataT0_gen$group <- groupfactor(dataT0_gen)
+dataT0_gen$q1_sex <- factor(dataT0_gen$q1_sex, levels = c("M","F"), labels = c("M","F"))
+dataT0_gen$q5_civ <- factor(dataT0_gen$q5_civ, levels = c("single", "married", "divorced", "separated", "widowed"), labels = c("single", "married", "divorced", "separated", "widowed"))
+dataT0_gen$q6_employeedays <- factor(dataT0_gen$q6_employeedays, levels = c("full time", "half time", "free lance", "scholarized","not scholarized", "reteired", "housewife", "unemployee"), labels = c("full time", "half time", "free lance", "scholarized","not scholarized", "reteired", "housewife", "unemployee"))
+dataT0_gen$q6_employeeyr <- factor(dataT0_gen$q6_employeeyr, levels = c("full time", "half time", "free lance", "scholarized","not scholarized", "reteired", "housewife", "unemployee"), labels = c("full time", "half time", "free lance", "scholarized","not scholarized", "reteired", "housewife", "unemployee"))
+dataT0_gen$q6_sustance <- factor(dataT0_gen$q6_sustance, levels = c("crack-cocaine","cocaine"), labels = c("crack-cocaine","cocaine"))
+dataT0_gen$score_clasif <- factor(dataT0_gen$score_clasif, levels = c("AB","C+","C", "C-", "D+", "D", "E"))
+
+data2w$group <- groupfactor(data2w)
+data2w$stage <- stagefactor(data2w)
+data2w$sex <- factor(data2w$sex, levels = c("M","F"), labels = c("M","F"))
+data2w$ut_coc <- factor(data2w$ut_coc, levels = c("positive","negative"), labels = c("positive","negative"))
+data2w$hars_categories <- factor(data2w$hars_categories, levels = c("mild severity","mild to moderate severity", "moderate-severe"), labels = c("mild severity","mild to moderate severity", "moderate-severe"))
+data2w$hdrs_categories <- factor(data2w$hdrs_categories, levels = c("normal","minor depression","less than major depressive","major depression","more than major depression"), labels = c("normal","minor depression","less than major depressive","major depression","more than major depression"))
+data2w$pitt_gqs <- factor(data2w$pitt_gqs, levels = c(1,2), labels = c("Good", "Bad"))
+
+
+data6m$group <- groupfactor(data6m)
+data6m$stage <- stagefactor(data6m)
+data6m$sex <- factor(data6m$sex, levels = c("M","F"), labels = c("M","F"))
+data6m$ut_coc <- factor(data6m$ut_coc, levels = c("positive","negative"), labels = c("positive","negative"))
+data6m$hars_categories <- factor(data6m$hars_categories, levels = c("mild severity","mild to moderate severity", "moderate-severe"), labels = c("mild severity","mild to moderate severity", "moderate-severe"))
+data6m$hdrs_categories <- factor(data6m$hdrs_categories, levels = c("normal","minor depression","less than major depressive","major depression","more than major depression"), labels = c("normal","minor depression","less than major depressive","major depression","more than major depression"))
+data6m$pitt_gqs <- factor(data6m$pitt_gqs, levels = c("Good", "Bad"), labels = c("Good", "Bad"))
+data6m$stage_openlabel <- factor(data6m$stage_openlabel, levels = c("BASELINE", "2W", "3M", "6M"))
+
+data6m_conn$group <- groupfactor(data6m_conn)
+data6m_conn$stage <- stagefactor(data6m_conn)
+data6m_conn$sex <- factor(data6m_conn$sex, levels = c("M","F"), labels = c("M","F"))
+data6m_conn$ut_coc <- factor(data6m_conn$ut_coc, levels = c("positive","negative"), labels = c("positive","negative"))
+data6m_conn$hars_categories <- factor(data6m_conn$hars_categories, levels = c("mild severity","mild to moderate severity", "moderate-severe"), labels = c("mild severity","mild to moderate severity", "moderate-severe"))
+data6m_conn$hdrs_categories <- factor(data6m_conn$hdrs_categories, levels = c("normal","minor depression","less than major depressive","major depression","more than major depression"), labels = c("normal","minor depression","less than major depressive","major depression","more than major depression"))
+data6m_conn$pitt_gqs <- factor(data6m_conn$pitt_gqs, levels = c("Good", "Bad"), labels = c("Good", "Bad"))
+data6m_conn$stage_openlabel <- factor(data6m_conn$stage_openlabel, levels = c("BASELINE", "2W", "3M", "6M"))
+```
+
+# Label columns
+```{r Add_labels}
+dataT0_gen$rid <- set_label(dataT0_gen$rid, label = "ID")
+dataT0_gen$group <- set_label(dataT0_gen$group, label = "Group")
+dataT0_gen$stage <- set_label(dataT0_gen$stage, label = "Timepoint")
+dataT0_gen$q1_sex <- set_label(dataT0_gen$q1_sex, label = "Sex")
+dataT0_gen$q1_age <- set_label(dataT0_gen$q1_age, label = "Age")
+dataT0_gen$q2_edyears <- set_label(dataT0_gen$q2_edyears, label = "Years of education")
+dataT0_gen$q5_civ <- set_label(dataT0_gen$q5_civ, label = "Marital status")
+dataT0_gen$q6_month <- set_label(dataT0_gen$q6_month, label = "Montly income (MXN)")
+dataT0_gen$q6_employeeyr <- set_label(dataT0_gen$q6_employeeyr, label = "Employment (last 3 years)")
+dataT0_gen$q7_yrstart <- set_label(dataT0_gen$q7_yrstart, label = "Onset age of cocaine use")
+dataT0_gen$q7_tconsume <- set_label(dataT0_gen$q7_tconsume, label = "Years of cocaine use")
+dataT0_gen$score_clasif <- set_label(dataT0_gen$score_clasif, label = "Socioeconomic status")  
+
+data2w$rid <- set_label(data2w$rid, label = "ID")
+data2w$group <- set_label(data2w$group, label = "Group")
+data2w$stage <- set_label(data2w$stage, label = "Timepoint")
+data2w$sex <- set_label(data2w$sex, label = "Sex")
+data2w$age <- set_label(data2w$age, label = "Age")
+data2w$educ <- set_label(data2w$educ, label = "Education")
+data2w$ccq_g <- set_label(data2w$ccq_g, label = "CCQ-General")
+data2w$ccq_n <- set_label(data2w$ccq_n, label = "CCQ-Now")
+data2w$vas <- set_label(data2w$vas, label = "VAS")
+data2w$ut_coc <- set_label(data2w$ut_coc, label = "Urine Test: Cocaine")
+data2w$bis11t <- set_label(data2w$bis11t, label = "BIS-11 Total")
+data2w$bis11cog <- set_label(data2w$bis11cog, label = "BIS-11 Cognitive")
+data2w$bis11mot <- set_label(data2w$bis11mot, label = "BIS-11 Motor")
+data2w$bis11nonp <- set_label(data2w$bis11nonp, label = "BIS-11 Non-planned")
+data2w$hars_tot <- set_label(data2w$hars_tot, label = "HDRS score")
+data2w$hars_categories <- set_label(data2w$hars_categories, label = "HDRS categories")
+data2w$hdrs_tot <- set_label(data2w$hdrs_tot, label = "HDRS score")
+data2w$hdrs_categories <- set_label(data2w$hdrs_categories, label = "HDRS categories")
+data2w$pitt_score <- set_label(data2w$pitt_score, label = "PSQI total score")
+data2w$pitt_gqs <- set_label(data2w$pitt_gqs, label = "PSQI Global Quality of Sleep")
+data2w$conn_dlvm <- set_label(data2w$conn_dlvm, label = "lDLPFC - vmPFC Conn Z-score")
+data2w$vmpfc_cluster <- set_label(data2w$vmpfc_cluster, label = "vmPFC - Right AnG Conn Z-score")
+data2w$vasZ <- set_label(data2w$vasZ, label = "VAS Z-score")
+data2w$bis11tZ <- set_label(data2w$bis11tZ, label = "BIS-11 Total Z-score")
+data2w$ccqnZ <- set_label(data2w$ccqnZ, label = "CCQ-Now Z-score")
+
+
+data6m$rid <- set_label(data6m$rid, label = "ID")
+data6m$group <- set_label(data6m$group, label = "Group")
+data6m$stage <- set_label(data6m$stage, label = "Timepoint")
+data6m$stage_openlabel <- factor(data6m$stage_openlabel, levels = c("BASELINE", "2W", "3M", "6M"))
+data6m$sex <- set_label(data6m$sex, label = "Sex")
+data6m$age <- set_label(data6m$age, label = "Age")
+data6m$educ <- set_label(data6m$educ, label = "Education")
+data6m$ccq_g <- set_label(data6m$ccq_g, label = "CCQ-General")
+data6m$ccq_n <- set_label(data6m$ccq_n, label = "CCQ-Now")
+data6m$vas <- set_label(data6m$vas, label = "VAS")
+data6m$ut_coc <- set_label(data6m$ut_coc, label = "Urine Test: Cocaine")
+data6m$bis11t <- set_label(data6m$bis11t, label = "BIS-11 Total")
+data6m$bis11cog <- set_label(data6m$bis11cog, label = "BIS-11 Cognitive")
+data6m$bis11mot <- set_label(data6m$bis11mot, label = "BIS-11 Motor")
+data6m$bis11nonp <- set_label(data6m$bis11nonp, label = "BIS-11 Non-planned")
+data6m$hars_tot <- set_label(data6m$hars_tot, label = "HDRS score")
+data6m$hars_categories <- set_label(data6m$hars_categories, label = "HDRS categories")
+data6m$hdrs_tot <- set_label(data6m$hdrs_tot, label = "HDRS score")
+data6m$hdrs_categories <- set_label(data6m$hdrs_categories, label = "HDRS categories")
+data6m$pitt_score <- set_label(data6m$pitt_score, label = "PSQI total score")
+data6m$pitt_gqs <- set_label(data6m$pitt_gqs, label = "PSQI Global Quality of Sleep")
+
+data6m_conn$rid <- set_label(data6m_conn$rid, label = "ID")
+data6m_conn$group <- set_label(data6m_conn$group, label = "Group")
+data6m_conn$stage <- set_label(data6m_conn$stage, label = "Timepoint")
+data6m_conn$stage_openlabel <- factor(data6m_conn$stage_openlabel, levels = c("BASELINE", "2W", "3M", "6M"))
+data6m_conn$sex <- set_label(data6m_conn$sex, label = "Sex")
+data6m_conn$age <- set_label(data6m_conn$age, label = "Age")
+data6m_conn$educ <- set_label(data6m_conn$educ, label = "Education")
+data6m_conn$ccq_g <- set_label(data6m_conn$ccq_g, label = "CCQ-General")
+data6m_conn$ccq_n <- set_label(data6m_conn$ccq_n, label = "CCQ-Now")
+data6m_conn$vas <- set_label(data6m_conn$vas, label = "VAS")
+data6m_conn$ut_coc <- set_label(data6m_conn$ut_coc, label = "Urine Test: Cocaine")
+data6m_conn$bis11t <- set_label(data6m_conn$bis11t, label = "BIS-11 Total")
+data6m_conn$bis11cog <- set_label(data6m_conn$bis11cog, label = "BIS-11 Cognitive")
+data6m_conn$bis11mot <- set_label(data6m_conn$bis11mot, label = "BIS-11 Motor")
+data6m_conn$bis11nonp <- set_label(data6m_conn$bis11nonp, label = "BIS-11 Non-planned")
+data6m_conn$hars_tot <- set_label(data6m_conn$hars_tot, label = "HDRS score")
+data6m_conn$hars_categories <- set_label(data6m_conn$hars_categories, label = "HDRS categories")
+data6m_conn$hdrs_tot <- set_label(data6m_conn$hdrs_tot, label = "HDRS score")
+data6m_conn$hdrs_categories <- set_label(data6m_conn$hdrs_categories, label = "HDRS categories")
+data6m_conn$pitt_score <- set_label(data6m_conn$pitt_score, label = "PSQI total score")
+data6m_conn$pitt_gqs <- set_label(data6m_conn$pitt_gqs, label = "PSQI Global Quality of Sleep")
+data6m_conn$conn_dlvm <- set_label(data6m_conn$conn_dlvm, label = "lDLPFC - vmPFC Conn Z-score")
+data6m_conn$vmpfc_cluster <- set_label(data6m_conn$vmpfc_cluster, label = "vmPFC - Right AnG Conn Z-score")
+
+
+```
+
+## Results, Tables and Figures
+
+### Table 1
+```{r}
+table1 <- mytable(group~., data=dataT0_gen, use.column.label = TRUE, use.labels = TRUE)
+table1
+```
+
+### Table 2
+```{r}
+data2w_T0 <- data2w %>%
+  filter(stage == "T0")
+
+table2 <- mytable(group ~., data = data2w_T0)
+table2
+```
+
+
+## Acute Phase clinical assessment
+
+### Mixed Models
+```{r}
+lm_vas <- lmer(vas ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_vas)
+
+```
+
+```{r}
+lm_ccqn <- lmer(ccq_n ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_ccqn)
+
+```
+
+```{r}
+lm_bis11 <- lmer(bis11t ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_bis11)
+
+```
+
+```{r}
+lm_hars <- lmer(hars_tot ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_hars)
+
+```
+
+```{r}
+lm_hdrs <- lmer(hdrs_tot ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_hdrs)
+
+```
+
+```{r}
+lm_sleep <- lmer(pitt_score ~ stage * group + age + sex + (1|rid), data2w)
+summary(lm_sleep)
+```
+
+### Multiple comparisons correction
+```{r}
+p.adjust(c(0.0106,0.6686,0.7489,0.6495), method = "fdr", n = 4)
+p.adjust(c(0.0125,0.110), method = "fdr", n = 2)
+```
+
+### Effect sizes
+
+```{r}
+lme.dscore(lm_vas, data=data2w, type="lme4") # Effect Size
+lme.dscore(lm_ccqn, data=data2w, type="lme4")
+lme.dscore(lm_bis11, data=data2w, type="lme4")
+lme.dscore(lm_hars, data=data2w, type="lme4")
+lme.dscore(lm_hdrs, data=data2w, type="lme4")
+lme.dscore(lm_sleep, data=data2w, type="lme4")
+
+s1 = (44-3)/(44-2.25) # component 1 for the correction for small samples (n<50)
+s2 = sqrt((44-2)/(44)) # component 2
+
+vas_es = -0.8052*s1*s2 # corrected for small samples
+ccqn_es = -0.50332260*s1*s2
+bis11_es = -0.82609589*s1*s2
+hars_es = -0.9734617*s1*s2
+hdrs_es = -1.09490278*s1*s2
+sleep_es = -0.84913187*s1*s2
+```
+
+### Urine tests
+```{r}
+cochrans_table <- data2w %>%
+  dplyr::select(rid, group, stage, ut_coc) %>%
+  na.omit()
+
+cochrans_table$stage <- as.numeric(cochrans_table$stage)
+cochrans_table$ut_coc <- as.numeric(cochrans_table$ut_coc)
+cochrans_table$group <- as.numeric(cochrans_table$group)
+cochrans_table <- cochrans_table %>%
+  mutate(ut_coc = ifelse(ut_coc == 2, 0, 1))
+
+cochrans_table_sham <- xtabs(ut_coc ~ rid + stage, 
+                          data=cochrans_table, subset = group == 1)
+
+cochrans_table_active <- xtabs(ut_coc ~ rid + stage, 
+                             data=cochrans_table, subset = group == 2)
+
+cochrans_table_both <- xtabs(ut_coc ~ rid + stage + group, 
+                               data=cochrans_table)
+summary(cochrans_table_both)
+```
+
+### Table 3
+```{r}
+table3 <- mytable(stage+group ~., data = data2w)
+table3
+```
+
+### Figure Clinical measures
+
+```{r}
+
+sumrepdat <- summarySE(data2w, measurevar = "vas", groupvars=c("
+group", "stage"))
+
+p1 <- ggplot(data2w, aes(x = stage, y = vas, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = vas, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = vas, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = vas_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = vas_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = vas_mean, group = group, colour = group, ymin = vas_mean-se, ymax
+                                      = vas_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Craving VAS")+ xlab("")
+
+sumrepdat <- summarySE(data2w, measurevar = "ccq_n", groupvars=c("
+group", "stage"))
+
+p2 <- ggplot(data2w, aes(x = stage, y = ccq_n, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = ccq_n, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = ccq_n, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = ccq_n_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = ccq_n_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = ccq_n_mean, group = group, colour = group, ymin = ccq_n_mean-se, ymax
+                                      = ccq_n_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Craving CCQ-Now")+ xlab("")
+
+sumrepdat <- summarySE(data2w, measurevar = "bis11t", groupvars=c("
+group", "stage"))
+
+p3 <- ggplot(data2w, aes(x = stage, y = bis11t, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = bis11t, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = bis11t, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = bis11t_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = bis11t_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = bis11t_mean, group = group, colour = group, ymin = bis11t_mean-se, ymax
+                                      = bis11t_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Impulsivity")+ xlab("")
+
+sumrepdat <- summarySE(data2w, measurevar = "hars_tot", groupvars=c("
+group", "stage"))
+
+p4 <- ggplot(data2w, aes(x = stage, y = hars_tot, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = hars_tot, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = hars_tot, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = hars_tot_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = hars_tot_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = hars_tot_mean, group = group, colour = group, ymin = hars_tot_mean-se, ymax
+                                      = hars_tot_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Anxiety")+ xlab("Time point")
+
+sumrepdat <- summarySE(data2w, measurevar = "hdrs_tot", groupvars=c("
+group", "stage"))
+
+p5 <- ggplot(data2w, aes(x = stage, y = hdrs_tot, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = hdrs_tot, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = hdrs_tot, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = hdrs_tot_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = hdrs_tot_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = hdrs_tot_mean, group = group, colour = group, ymin = hdrs_tot_mean-se, ymax
+                                      = hdrs_tot_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Depression")+ xlab("Time point")
+
+sumrepdat <- summarySE(data2w, measurevar = "pitt_score", groupvars=c("
+group", "stage"))
+
+p6 <- ggplot(data2w, aes(x = stage, y = pitt_score, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = pitt_score, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = pitt_score, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = pitt_score_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = pitt_score_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = pitt_score_mean, group = group, colour = group, ymin = pitt_score_mean-se, ymax
+                                      = pitt_score_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Sleep")+ xlab("Time point")
+
+ggarrange(p1, p2, p3,
+          p4,p5,p6, labels = c("a.","b.","c.","d.","e.","f."), common.legend = TRUE, legend = "bottom")
+```
+
+### Figure lDLPFC FC
+```{r}
+
+sumrepdat <- summarySE(data2w, measurevar = "conn_dlvm", groupvars=c("
+group", "stage"))
+
+p11 <- ggplot(data2w, aes(x = stage, y = conn_dlvm, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = conn_dlvm, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = conn_dlvm, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = conn_dlvm_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = conn_dlvm_mean, group = group, colour = group), shape = 18,
+             show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = conn_dlvm_mean, group = group, colour = group, ymin = conn_dlvm_mean-se, ymax
+                                      = conn_dlvm_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
+  ylab("Left DLPFC - vmPFC Connectivity (Z)")+ xlab("Time point")
+```
+  
+### Figure vmPFC FC
+
+```{r}
+sumrepdat <- summarySE(data2w, measurevar = "vmpfc_cluster", groupvars=c("
+group", "stage"))
+
+p12 <- ggplot(data2w, aes(x = stage, y = vmpfc_cluster, fill = group)) +
+  geom_flat_violin(aes(fill = group),position = position_nudge(x = .25, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5, colour = NA) +
+  geom_point(aes(x = as.numeric(stage)-.25, y = vmpfc_cluster, colour = group
+  ), position = position_jitter(width = .05), size = 2, shape = 20, show.legend = FALSE) +
+  geom_boxplot(aes(x = stage, y = vmpfc_cluster, fill = group), 
+               outlier.shape = NA, alpha = .5, width = .25, colour = "black") +
+  geom_line(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                  y = vmpfc_cluster_mean, group = group, colour = group), linetype = 3, size = .7,
+            show.legend = FALSE) +
+  geom_point(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                   y = vmpfc_cluster_mean, group = group, colour = group), shape = 18, show.legend = FALSE) +
+  geom_errorbar(data = sumrepdat, aes(x = as.numeric(stage)+.25,
+                                      y = vmpfc_cluster_mean, group = group, colour = group, ymin = vmpfc_cluster_mean-se, ymax
+                                      = vmpfc_cluster_mean+se), width = .1, show.legend = FALSE)+
+  scale_colour_manual(values = c('#FF3333','#3399FF'))+
+  scale_fill_manual(values = c('#FF0000','#3399FF'), name="Group")+
+  ylab("vmPFC - right AnG Connectivity (Z)")+ xlab("Time point")
+```
+
+### Figure FC-Clinical Correlation
+
+```{r}
+p1 <- ggplot(delta_data, aes(conn_dlvm.diff, bis11tZZ.diff))+
+  geom_point(aes(color=group)) + geom_smooth(aes(color="black"),method = "lm", linetype=3, show.legend = FALSE) +
+  xlab("Δ Left DLPFC - vmPFC Connectivity (Z)") + ylab("Δ Impulsivity (Z)") +
+  scale_colour_manual(breaks=c("SHAM", "ACTIVE"), values = c('#3399FF',"black",'#FF3333'), name = "Group")
+
+p2 <- ggplot(delta_data, aes(vmpfc.diff, bis11tZZ.diff))+
+  geom_point(aes(color=group)) + geom_smooth(aes(color="black"),method = "lm", linetype=3, show.legend = FALSE) +
+  xlab("Δ vmPFC - right AnG Connectivity (Z)") + ylab("Δ Impulsivity (Z)") +
+  scale_colour_manual(breaks=c("SHAM", "ACTIVE"), values = c('#3399FF',"black",'#FF3333'), name = "Group")
+
+ggarrange(p1,p2,ncol = 1, labels = c("a.","b."), common.legend = TRUE, legend = "right", vjust = 1, widths = 0.5)
+```
+
+### Figure Maintenance Phase Clinical
+
+```{r}
+## Raincloud plots
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "vas", groupvars="stage_openlabel")
+
+p1 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=vas,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = vas, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = vas),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Craving VAS')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = vas_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "ccq_n", groupvars="stage_openlabel")
+
+p2 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=ccq_n,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = ccq_n, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = ccq_n),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Craving CCQ-Now')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = ccq_n_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "bis11t", groupvars="stage_openlabel")
+
+p3 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=bis11t,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = bis11t, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = bis11t),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Impulsivity')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = bis11t_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "hars_tot", groupvars="stage_openlabel")
+
+p4 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=hars_tot,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = hars_tot, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = hars_tot),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Anxiety')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = hars_tot_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "hdrs_tot", groupvars="stage_openlabel")
+
+p5 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=hdrs_tot,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = hdrs_tot, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = hdrs_tot),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Depression')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = hdrs_tot_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_nona, measurevar = "pitt_score", groupvars="stage_openlabel")
+
+p6 <- ggplot(data6m_nona,aes(x=stage_openlabel,y=pitt_score,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = pitt_score, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = pitt_score),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Sleep')+ xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = pitt_score_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+ggarrange(p1,p2,p3,
+          p4,p5,p6, labels = c("a.","b.","c.","d.","e.","f."), common.legend = TRUE, legend = "bottom",
+          font.label = list(size = 20))
+```
+
+### Figure Maintenance Phase FC
+
+```{r}
+data6m_conn <- data6m_conn %>%
+  na.omit()
+
+sumrepdat <- summarySE(data6m_conn, measurevar = "conn_dlvm", groupvars="stage_openlabel")
+
+p1 <- ggplot(data6m_conn,aes(x=stage_openlabel,y=conn_dlvm,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = conn_dlvm, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = conn_dlvm),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('Left DLPFC - vmPFC Connectivity')+
+  xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = conn_dlvm_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+sumrepdat <- summarySE(data6m_conn, measurevar = "vmpfc_cluster", groupvars="stage_openlabel")
+
+p2 <- ggplot(data6m_conn,aes(x=stage_openlabel,y=vmpfc_cluster,fill=stage_openlabel,color=stage_openlabel)) +
+  #geom_flat_violin(position = position_nudge(x = .20, y = 0), alpha = .4,adjust =4) +
+  geom_boxplot(aes(x = stage_openlabel, y = vmpfc_cluster, fill = stage_openlabel),
+               outlier.shape = NA, alpha = .50, width = .25, color = "black") +
+  geom_point(aes(x = as.numeric(stage_openlabel)-.35, y = vmpfc_cluster),
+             position=position_jitter(width = .15),size = 1, alpha = 0.4)+ylab('vmPFC - Right AnG Connectivity')+
+  xlab("Time point")+
+  geom_point(data=sumrepdat, aes(x = stage_openlabel, y = vmpfc_cluster_mean), shape = 17, size = 3) +
+  scale_fill_brewer(palette = "Dark2")+
+  scale_colour_brewer(palette = "Dark2")+
+  guides(fill = FALSE, col = FALSE)
+
+ggarrange(p1,p2, labels = c("a.","b."), ncol = 1, vjust = 1, common.legend = TRUE, legend = "top",
+          font.label = list(size = 20))
+```
+

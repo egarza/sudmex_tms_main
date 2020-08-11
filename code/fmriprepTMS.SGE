@@ -1,0 +1,39 @@
+#! /bin/bash
+## SGE batch file - fmriprepTMS_21JAN2020
+#$ -S /bin/bash
+#$ -N fmriprepTMS_21JAN2020
+## -t 1-51
+#$ -V
+#$ -l mem_free=18G
+#$ -pe openmp 10
+#$ -j y
+#$ -wd /mnt/MD1200B/egarza/sfernandezl/logs/fmriprep
+
+module load singularity/2.2
+
+## sudo chmod 777 /mnt
+# mkdir -p /mnt/MD1200B/egarza/sfernandezl/AddimexTMS/derivatives/fmriprep/output_21JAN2020
+export FS_LICENSE=/mnt/MD1200B/egarza/sfernandezl/freesurferLicense/license.txt
+container=/mnt/MD1200B/egarza/egarza/singularity_images/poldracklab_fmriprep-2020-01-14-933ad4693a12.img
+subList=/mnt/MD1200B/egarza/sfernandezl/AddimexTMS/participants.tsv
+sge_ndx=$(awk -v F='\t' -v OFS='\t' -v subIndx=$(($SGE_TASK_ID + 1)) 'NR==subIndx {print $1}' $subList)
+
+# random sleep so that jobs dont start at _exactly_ the same time
+sleep $(( $SGE_TASK_ID % 10 ))
+
+singularity run -B /mnt:/mnt \
+	--home $HOME \
+    $container \
+    /mnt/MD1200B/egarza/sfernandezl/AddimexTMS \
+    /mnt/MD1200B/egarza/sfernandezl/AddimexTMS/derivatives/fmriprep/output_21JAN2020 \
+    participant \
+    --participant-label ${sge_ndx} \
+    --skip_bids_validation \
+    --resource-monitor \
+    --write-graph \
+    --work-dir /mnt/MD1200B/egarza/sfernandezl/tmp \
+    --output-spaces T1w MNI152NLin6Asym \
+    --longitudinal \
+	--fd-spike-threshold 0.5 \
+	--fs-no-reconall \
+    --use-syn-sdc;

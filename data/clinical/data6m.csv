@@ -1,0 +1,117 @@
+rid,group,stage,stage_openlabel,sex,age,educ,ccq_g,ccq_n,vas,ut_coc,bis11t,bis11cog,bis11mot,bis11nonp,hars_tot,hars_categories,hdrs_tot,hdrs_categories,pitt_score,pitt_gqs
+1,SHAM,T1,BASELINE,M,18,9,198,204,7.4,negative,72,30,20,22,26,moderate-severe,3,normal,4,Good
+2,SHAM,T1,BASELINE,F,44,12,98,79,0,negative,66,22,31,13,17,mild severity,7,normal,8,Bad
+2,SHAM,T1-4,2W,F,44,12,165,171,0,negative,47,11,21,15,20,mild to moderate severity,7,normal,11,Bad
+2,SHAM,T2,3M,F,44,12,76,181,0,negative,48,14,21,13,21,mild to moderate severity,5,normal,14,Bad
+2,SHAM,T3,6M,F,44,12,194,82,8.3,positive,66,19,23,24,38,moderate-severe,21,major depression,17,Bad
+3,ACTIVE,T0,BASELINE,M,39,16,229,176,5.5,positive,69,11,27,31,6,mild severity,12,minor depression,14,Bad
+3,ACTIVE,T1,2W,M,39,16,183,128,1.5,positive,55,16,16,23,14,mild severity,12,minor depression,11,Bad
+3,ACTIVE,T2,3M,M,39,16,204,140,3.3,positive,52,17,15,20,17,mild severity,12,minor depression,13,Bad
+3,ACTIVE,T3,6M,M,39,16,276,138,3.6,positive,71,14,25,32,12,mild severity,5,normal,11,Bad
+4,ACTIVE,T0,BASELINE,M,46,12,149,131,1.3,negative,85,26,27,32,9,mild severity,14,less than major depressive,4,Good
+4,ACTIVE,T1,2W,M,46,12,97,93,0.1,negative,56,19,16,21,2,mild severity,2,normal,2,Good
+4,ACTIVE,T2,3M,M,46,12,63,66,0,negative,40,11,16,13,0,mild severity,0,normal,4,Good
+4,ACTIVE,T3,6M,M,46,12,174,177,5.9,negative,51,14,16,21,2,mild severity,0,normal,6,Bad
+6,SHAM,T1,BASELINE,M,46,12,148,111,1.5,negative,29,7,11,11,1,mild severity,1,normal,5,Good
+6,SHAM,T1-4,2W,M,46,12,129,123,0,negative,35,13,15,7,9,mild severity,5,normal,13,Bad
+7,ACTIVE,T0,BASELINE,M,40,18,256,230,9,negative,76,20,28,28,30,moderate-severe,14,less than major depressive,15,Bad
+7,ACTIVE,T1,2W,M,40,18,96,108,0.6,negative,29,9,8,12,3,mild severity,4,normal,9,Bad
+7,ACTIVE,T2,3M,M,40,18,91,111,1,negative,56,21,15,20,4,mild severity,2,normal,9,Bad
+7,ACTIVE,T3,6M,M,40,18,95,128,1.21,negative,40,14,10,16,5,mild severity,1,normal,11,Bad
+8,SHAM,T1,BASELINE,M,33,15,111,105,0,negative,47,16,12,19,4,mild severity,5,normal,11,Bad
+8,SHAM,T1-4,2W,M,33,15,127,99,0,negative,36,11,11,14,3,mild severity,1,normal,6,Bad
+8,SHAM,T2,3M,M,33,15,123,93,0,negative,47,17,6,24,1,mild severity,0,normal,3,Good
+8,SHAM,T3,6M,M,33,15,127,94,0,negative,28,13,5,10,1,mild severity,0,normal,3,Good
+10,SHAM,T1,BASELINE,M,47,13,178,199,8.4,positive,95,32,27,36,25,moderate-severe,28,major depression,10,Bad
+10,SHAM,T1-4,2W,M,47,13,188,195,5,positive,55,15,19,21,27,moderate-severe,6,normal,7,Bad
+11,ACTIVE,T0,BASELINE,M,24,13,230,209,7.6,positive,49,18,10,21,27,moderate-severe,13,less than major depressive,6,Bad
+11,ACTIVE,T1,2W,M,24,13,224,197,4,positive,52,15,11,26,14,mild severity,6,normal,9,Bad
+12,SHAM,T1,BASELINE,M,23,15,158,124,1.9,positive,43,18,8,17,14,mild severity,7,normal,6,Bad
+13,SHAM,T1,BASELINE,M,33,17.6,213,182,2,positive,74,22,26,26,26,moderate-severe,14,less than major depressive,12,Bad
+13,SHAM,T1-4,2W,M,33,17.6,248,87,0,positive,45,16,9,20,20,mild to moderate severity,26,major depression,15,Bad
+15,ACTIVE,T0,BASELINE,F,37,13,129,103,2.9,negative,53,15,15,23,28,moderate-severe,16,less than major depressive,12,Bad
+15,ACTIVE,T1,2W,F,37,13,100,80,0,negative,32,5,7,20,4,mild severity,3,normal,4,Good
+15,ACTIVE,T3,6M,F,37,13,117,109,0,NA,46,13,7,26,4,mild severity,1,normal,3,Good
+16,ACTIVE,T0,BASELINE,M,26,12,241,266,10,positive,70,21,26,23,36,moderate-severe,23,major depression,15,Bad
+16,ACTIVE,T1,2W,M,26,12,205,205,7.23,positive,52,13,11,28,27,moderate-severe,18,major depression,6,Bad
+17,ACTIVE,T0,BASELINE,M,27,8,219,121,0.47,positive,72,19,23,30,37,moderate-severe,19,major depression,10,Bad
+17,ACTIVE,T1,2W,M,27,8,195,126,0,negative,43,12,8,23,3,mild severity,0,normal,7,Bad
+18,SHAM,T1,BASELINE,M,27,9,180,160,1.2,positive,72,20,17,35,7,mild severity,4,normal,6,Bad
+19,SHAM,T1,BASELINE,M,34,14,87,75,0,negative,71,19,21,31,10,mild severity,4,normal,5,Good
+20,ACTIVE,T0,BASELINE,M,34,9,143,99,10,negative,68,19,21,28,12,mild severity,7,normal,6,Bad
+20,ACTIVE,T1,2W,M,34,9,79,87,0,negative,44,14,12,18,12,mild severity,7,normal,11,Bad
+20,ACTIVE,T2,3M,M,34,9,111,81,0,negative,44,15,9,20,9,mild severity,3,normal,13,Bad
+20,ACTIVE,T3,6M,M,34,9,132,99,0,negative,65,20,20,25,7,mild severity,6,normal,7,Bad
+21,ACTIVE,T0,BASELINE,M,32,12,112,90,1,negative,63,24,16,23,16,mild severity,14,less than major depressive,15,Bad
+21,ACTIVE,T1,2W,M,32,12,99,75,0,positive,78,26,19,33,24,mild to moderate severity,12,minor depression,14,Bad
+22,SHAM,T1,BASELINE,M,19,12,87,63,0,negative,90,24,23,43,23,mild to moderate severity,2,normal,4,Good
+22,SHAM,T1-4,2W,M,19,12,81,69,0,negative,53,15,19,19,3,mild severity,1,normal,5,Good
+22,SHAM,T2,3M,M,19,12,123,105,0,negative,62,19,15,28,20,mild to moderate severity,23,major depression,5,Good
+22,SHAM,T3,6M,M,19,12,105,87,0,negative,87,22,31,34,28,moderate-severe,18,major depression,9,Bad
+23,ACTIVE,T0,BASELINE,F,42,19,219,142,0,negative,42,11,7,24,5,mild severity,7,normal,16,Bad
+23,ACTIVE,T1,2W,F,42,19,120,97,0,negative,31,9,5,17,7,mild severity,4,normal,9,Bad
+23,ACTIVE,T2,3M,F,42,19,115,95,0,negative,36,9,8,19,3,mild severity,2,normal,8,Bad
+23,ACTIVE,T3,6M,F,42,19,84,84,0,negative,20,4,12,4,3,mild severity,2,normal,5,Good
+24,ACTIVE,T0,BASELINE,M,47,16,200,161,0,positive,56,9,20,27,10,mild severity,9,minor depression,14,Bad
+24,ACTIVE,T1,2W,M,47,16,141,88,0.2,positive,60,13,23,24,7,mild severity,3,normal,13,Bad
+24,ACTIVE,T2,3M,M,47,16,93,87,0,positive,41,11,17,13,19,mild to moderate severity,2,normal,3,Good
+24,ACTIVE,T3,6M,M,47,16,84,87,0,negative,37,13,9,15,7,mild severity,0,normal,5,Good
+25,ACTIVE,T0,BASELINE,M,36,16,265,141,5,positive,66,18,18,30,29,moderate-severe,22,major depression,17,Bad
+25,ACTIVE,T1,2W,M,36,16,134,140,1.5,negative,71,23,19,29,16,mild severity,5,normal,11,Bad
+25,ACTIVE,T2,3M,M,36,16,92,92,0,negative,42,14,16,12,5,mild severity,1,normal,3,Good
+25,ACTIVE,T3,6M,M,36,16,176,176,7.89,negative,76,24,26,26,32,moderate-severe,15,less than major depressive,5,Good
+26,ACTIVE,T0,BASELINE,F,36,11,107,100,5,negative,98,28,34,36,42,moderate-severe,18,major depression,12,Bad
+26,ACTIVE,T1,2W,F,36,11,157,118,2.5,positive,81,23,28,30,50,moderate-severe,19,major depression,11,Bad
+27,SHAM,T1,BASELINE,M,32,12,253,168,5.15,negative,79,23,32,24,12,mild severity,8,minor depression,9,Bad
+27,SHAM,T1-4,2W,M,32,12,130,129,0.52,negative,77,21,30,26,12,mild severity,5,normal,12,Bad
+27,SHAM,T2,3M,M,32,12,104,96,0,negative,59,20,16,23,1,mild severity,4,normal,10,Bad
+27,SHAM,T3,6M,M,32,12,109,81,0,negative,60,16,25,19,13,mild severity,4,normal,17,Bad
+30,SHAM,T1,BASELINE,M,43,16,191,188,5,positive,43,14,12,17,23,mild to moderate severity,0,normal,5,Good
+30,SHAM,T1-4,2W,M,43,16,166,127,2.2,positive,45,16,11,18,4,mild severity,2,normal,4,Good
+31,ACTIVE,T0,BASELINE,M,32,11,170,153,0,negative,59,19,17,23,1,mild severity,1,normal,4,Good
+31,ACTIVE,T1,2W,M,32,11,168,105,0,negative,49,11,17,21,0,mild severity,0,normal,4,Good
+31,ACTIVE,T2,3M,M,32,11,131,105,0,negative,30,16,9,5,0,mild severity,0,normal,4,Good
+32,ACTIVE,T0,BASELINE,M,47,9,243,215,10,positive,94,24,36,34,38,moderate-severe,32,more than major depression,14,Bad
+32,ACTIVE,T1,2W,M,47,9,261,255,9.3,negative,76,19,27,30,0,mild severity,0,normal,3,Good
+32,ACTIVE,T2,3M,M,47,9,189,160,0,positive,84,26,21,37,5,mild severity,7,normal,8,Bad
+32,ACTIVE,T3,6M,M,47,9,273,173,9,positive,62,16,19,27,0,mild severity,3,normal,4,Good
+33,SHAM,T1,BASELINE,M,25,8,144,128,3,negative,72,21,19,32,5,mild severity,12,minor depression,10,Bad
+34,ACTIVE,T0,BASELINE,M,37,15,163,106,0,negative,75,19,25,31,8,mild severity,5,normal,12,Bad
+34,ACTIVE,T1,2W,M,37,15,144,76,0,negative,74,19,24,31,0,mild severity,0,normal,7,Bad
+34,ACTIVE,T2,3M,M,37,15,222,118,0,positive,97,25,33,39,25,moderate-severe,22,major depression,10,Bad
+36,SHAM,T1,BASELINE,M,41,11,225,126,2,positive,76,23,24,29,17,mild severity,24,major depression,13,Bad
+36,SHAM,T1-4,2W,M,41,11,141,109,0,positive,76,18,26,32,5,mild severity,5,normal,7,Bad
+36,SHAM,T2,3M,M,41,11,203,124,0.3,positive,52,11,26,15,7,mild severity,6,normal,11,Bad
+36,SHAM,T3,6M,M,41,11,144,89,0.35,positive,70,18,25,27,6,mild severity,4,normal,8,Bad
+37,ACTIVE,T0,BASELINE,M,25,16,162,111,3.1,positive,70,18,22,30,11,mild severity,18,major depression,6,Bad
+37,ACTIVE,T1,2W,M,25,16,161,113,2.4,positive,73,20,25,28,7,mild severity,10,minor depression,7,Bad
+39,ACTIVE,T0,BASELINE,M,36,12,148,99,0,negative,75,23,25,27,2,mild severity,5,normal,11,Bad
+39,ACTIVE,T1,2W,M,36,12,111,81,0,negative,65,18,21,26,3,mild severity,3,normal,10,Bad
+39,ACTIVE,T2,3M,M,36,12,81,75,0,positive,60,18,19,23,1,mild severity,1,normal,12,Bad
+41,ACTIVE,T0,BASELINE,M,33,15,246,176,6.8,negative,36,13,11,12,9,mild severity,4,normal,6,Bad
+41,ACTIVE,T1,2W,M,33,15,203,84,1.2,negative,30,11,10,9,13,mild severity,0,normal,6,Bad
+41,ACTIVE,T2,3M,M,33,15,98,68,1,negative,50,18,9,23,0,mild severity,1,normal,11,Bad
+41,ACTIVE,T3,6M,M,33,15,65,70,0,negative,45,17,12,16,21,mild to moderate severity,6,normal,9,Bad
+42,SHAM,T1,BASELINE,M,37,16,174,127,0.9,positive,64,21,18,25,7,mild severity,2,normal,8,Bad
+42,SHAM,T1-4,2W,M,37,16,173,142,1.7,positive,69,20,18,31,2,mild severity,3,normal,11,Bad
+43,ACTIVE,T0,BASELINE,M,44,16,212,145,4.7,negative,22,4,5,13,5,mild severity,17,less than major depressive,10,Bad
+43,ACTIVE,T1,2W,M,44,16,83,69,0.4,negative,16,0,4,12,2,mild severity,8,minor depression,12,Bad
+43,ACTIVE,T2,3M,M,44,16,83,66,0,negative,14,0,5,9,6,mild severity,7,normal,15,Bad
+45,SHAM,T1,BASELINE,F,29,12,184,129,2.6,negative,59,14,29,16,4,mild severity,6,normal,6,Bad
+45,SHAM,T1-4,2W,F,29,12,202,110,1.3,negative,57,20,21,16,1,mild severity,2,normal,10,Bad
+46,SHAM,T1,BASELINE,M,40,17,183,179,1.05,positive,24,11,7,6,5,mild severity,5,normal,8,Bad
+46,SHAM,T1-4,2W,M,40,17,179,172,0.25,positive,59,10,20,29,1,mild severity,0,normal,NA,NA
+47,SHAM,T1,BASELINE,M,25,12,60,65,0.2,negative,36,10,7,19,2,mild severity,1,normal,7,Bad
+47,SHAM,T1-4,2W,M,25,12,61,79,0,negative,40,11,8,21,1,mild severity,0,normal,7,Bad
+48,ACTIVE,T0,BASELINE,M,30,12,194,186,6.9,negative,63,21,22,20,17,mild severity,17,less than major depressive,8,Bad
+48,ACTIVE,T1,2W,M,30,12,142,141,2.9,negative,54,17,18,19,3,mild severity,4,normal,9,Bad
+48,ACTIVE,T2,3M,M,30,12,109,84,0,negative,52,14,16,22,5,mild severity,1,normal,5,Good
+49,ACTIVE,T0,BASELINE,M,27,9,157,120,0.3,positive,66,13,24,29,9,mild severity,3,normal,4,Good
+49,ACTIVE,T1,2W,M,27,9,132,98,0,positive,52,11,15,26,2,mild severity,1,normal,7,Bad
+50,SHAM,T1,BASELINE,M,34,15,95,96,0.5,negative,64,11,31,22,3,mild severity,3,normal,13,Bad
+52,SHAM,T1,BASELINE,M,36,11,81,75,3.5,positive,20,6,12,2,2,mild severity,2,normal,9,Bad
+53,ACTIVE,T0,BASELINE,M,38,11,141,134,3,negative,64,24,20,20,19,mild to moderate severity,20,major depression,14,Bad
+53,ACTIVE,T1,2W,M,38,11,130,102,1.6,positive,46,12,15,19,15,mild severity,9,minor depression,10,Bad
+54,ACTIVE,T0,BASELINE,F,44,15,159,151,2.1,positive,63,20,14,29,22,mild to moderate severity,20,major depression,14,Bad
+54,ACTIVE,T1,2W,F,44,15,105,99,0,positive,56,11,19,26,11,mild severity,10,minor depression,15,Bad
+54,ACTIVE,T2,3M,F,44,15,111,129,0,NA,30,7,10,13,11,mild severity,2,normal,17,Bad
