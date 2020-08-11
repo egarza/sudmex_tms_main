@@ -468,6 +468,8 @@ p11 <- ggplot(data2w, aes(x = stage, y = conn_dlvm, fill = group)) +
   scale_colour_manual(values = c('#FF3333','#3399FF'))+
   scale_fill_manual(values = c('#FF0000','#3399FF'), name = "Group")+
   ylab("Left DLPFC - vmPFC Connectivity (Z)")+ xlab("Time point")
+
+p11
 ```
   
 ### Figure vmPFC FC
@@ -494,6 +496,8 @@ p12 <- ggplot(data2w, aes(x = stage, y = vmpfc_cluster, fill = group)) +
   scale_colour_manual(values = c('#FF3333','#3399FF'))+
   scale_fill_manual(values = c('#FF0000','#3399FF'), name="Group")+
   ylab("vmPFC - right AnG Connectivity (Z)")+ xlab("Time point")
+
+p12
 ```
 
 ### Figure FC-Clinical Correlation
