@@ -27,7 +27,7 @@ We also included the file `acute_interaction.sh`which includes the Interaction a
 Preprocessing was done using `fmriprep`, and the pipeline is the file `fmriprepTMS.SGE`.
 Processing was done using `xcpEngine`, and the pipeline is the file `xcpEngineFuncTMS.SGE`, while the `xcp_Engine` folder includes the `cohort` and `designs`files. 
 
-The `tms_location` folder has all the individual TMS locations in csv, the individual spheres and the code to produce them, as well as the images needed for our manuscript Figures.
+The `tms_location` folder has all the individual TMS locations in csv, the individual spheres and the code to produce them, as well as the images needed for our manuscript Figures. The script `SimulateTargetTMS.m` was used to create the cortical locations of the TMS localization in `Matlab`
 
 ### Analysis
 
