@@ -520,6 +520,7 @@ ggarrange(p1,p2,ncol = 1, labels = c("a.","b."), common.legend = TRUE, legend = 
 
 ```{r}
 ## Raincloud plots
+data6m_nona <- data6m[!is.na(data6m$stage_openlabel),]
 
 sumrepdat <- summarySE(data6m_nona, measurevar = "vas", groupvars="stage_openlabel")
 
